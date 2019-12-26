@@ -1,5 +1,6 @@
 chrome.extension.onMessage.addListener(
   function (request, sender, sendResponse) {
+    console.log(request)
     switch (request.type) {
       case "SEND_SOURCE": {
         var source = request.source;
@@ -10,8 +11,7 @@ chrome.extension.onMessage.addListener(
           var script = document.createElement('script');
           script.innerHTML = source;
           document.head.appendChild(script);
-        } else {
-        }
+        } else {}
         break;
       }
       default:
