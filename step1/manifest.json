@@ -2,23 +2,33 @@
   "manifest_version": 2,
   "name": "inject dom demo step1",
   "version": "0.0.1",
-  "description": "注入标签到页面",
+  "description": "自动化插件",
   "permissions": [
-    "<all_urls>"
+    "<all_urls>", "declarativeContent", "contextMenus"
+  ],
+  "web_accessible_resources": [
+    "js/inject-script.js"
   ],
   "icons": {
     "16": "images/icon.png"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "/content_scripts/content_script.js"
-      ],
-      "all_frames": true,
-      "run_at": "document_idle"
-    }
-  ]
+  "options_page": "options/index.html",
+  "content_scripts": [{
+    "matches": [
+      "<all_urls>"
+    ],
+    "js": [
+      "/js/content-script.js"
+    ],
+    "all_frames": true,
+    "run_at": "document_idle"
+  }],
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_title": "Chrome插件页面弹窗",
+    "default_popup": "page_action/index.html"
+  },
+  "background": {
+    "page": "background/index.html"
+  }
 }
