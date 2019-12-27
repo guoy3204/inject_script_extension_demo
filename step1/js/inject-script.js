@@ -4,9 +4,12 @@
     }
     console.log("inject-script.js loaded", window.location.href);
 
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log('DOMContentLoaded 被执行了！');
-    });
+    function initJQ() {
+        const jqScript = document.createElement('script');
+        jqScript.id = "jqNode"
+        jqScript.src = "//code.jquery.com/jquery-3.4.1.min.js"
+        document.head.appendChild(jqScript);
+    }
 
     function getRandom(start, end, fixed = 0) {
         let differ = end - start
@@ -24,13 +27,6 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    function initJQ() {
-        const jqScript = document.createElement('script');
-        jqScript.id = "jqNode"
-        jqScript.src = "//code.jquery.com/jquery-3.4.1.min.js"
-        document.head.appendChild(jqScript);
-    }
-
     var defaultLongTypeTime = 5; // 默认当局时长度 分钟
 
     function genRandomResult(id, accuracy) {
@@ -46,8 +42,8 @@
             result: "优秀，成绩不错哟！" //结果
         };
     }
-    (function () { //init
-        initJQ();
+
+    function init() { //init 
         var kpsResultsKey = "___ds_storage__kpsResultsKey"
         var kpsResultsData = window.localStorage.getItem(kpsResultsKey);
         var kpsResults = {} // 从缓存中加载数据
@@ -60,6 +56,32 @@
         }
         if (window.location.pathname.indexOf("typing") > 0) {
             console.log(window.location.pathname)
+            var inputElm = document.querySelector(".typing .typing");
+            // inputElm.addEventListener("keydown", function (e) {
+            //     console.log("keydown", e);
+            //     if (e.tag !== "custom") {
+            //         e.preventDefault();
+            //         //fireKeyEvent(this, "keydown", e.which); 
+            //     }
+
+            // });
+            var lastSpeed = 0;
+            setInterval(function () {
+                var sudo = document.querySelector("#typing_info_li .sudu");
+                var speed = sudo.innerText.substr(4, sudo.innerText.indexOf(" KP") - 4);
+                if (speed > 50 && speed < 190) {
+                    speed = getRandom(192, 245)
+                    sudo.innerText = "速　度：" + speed + " KPM"
+                }
+                lastSpeed = speed;
+                var endDivElm = document.querySelector(".typing_end_div")
+                if (endDivElm) {
+                    var endKpsElm = endDivElm.querySelectorAll("strong")[1];
+                    if (endKpsElm) {
+                        endKpsElm.innerText = lastSpeed
+                    }
+                }
+            }, 300)
         } else if (window.location.pathname.indexOf("list_") > 0) {
             var trItems = document.querySelectorAll("#content table tbody tr:not(.title)");
 
@@ -186,9 +208,19 @@
             }
         }
 
+        // addEvent($(document), "click", function () {
+        //     fireKeyEvent($("mytest"), "keydown", 86);
+        // });
+
         // const theScript = document.createElement('script');
         // theScript.innerHTML = `alert('hellow word !!');`;
         // document.body.appendChild(theScript);
         // $("#content table tbody tr:not(.title)") 
-    })()
+
+        initJQ();
+    }
+    window.onload = function () {
+        init();
+    }
+    initJQ();
 })()

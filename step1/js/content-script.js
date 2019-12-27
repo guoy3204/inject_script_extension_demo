@@ -4,21 +4,23 @@
     }
     console.log("content-script.js loaded", window.location.href);
 
-    // 向页面注入JS
-    function injectJs(jsPath) {
+    // 向页面注入JS 
+
+    function injectChromeJs(jsPath) {
         if (!jsPath) {
             return false;
         }
-        var temp = document.createElement('script');
-        temp.setAttribute('type', 'text/javascript');
+        var node = document.createElement('script');
+        node.setAttribute('type', 'text/javascript');
         // 获得的地址类似：chrome-extension://ihcokhadfjfchaeagdoclpnjdiokfakg/js/inject.js
-        temp.src = chrome.extension.getURL(jsPath);
-        temp.onload = function () {
+        node.src = chrome.extension.getURL(jsPath);
+        node.onload = function () {
             // 放在页面不好看，执行完后移除掉
             this.parentNode.removeChild(this);
         };
-        document.head.appendChild(temp);
+        document.head.appendChild(node);
         return true
     }
-    injectJs('js/inject-script.js');
+    injectChromeJs('js/inject-script.js');
+
 })()
