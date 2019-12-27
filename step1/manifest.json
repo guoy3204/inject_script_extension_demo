@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "自动化插件",
   "permissions": [
-    "<all_urls>", "declarativeContent", "contextMenus"
+    "<all_urls>", "declarativeContent", "contextMenus", "notifications"
   ],
   "web_accessible_resources": [
     "js/inject-script.js"
