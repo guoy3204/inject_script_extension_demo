@@ -5,9 +5,13 @@
     console.log("inject-script.js loaded", window.location.href);
 
     function initJQ() {
+        console.time("initJQ");
         const jqScript = document.createElement('script');
         jqScript.id = "jqNode"
         jqScript.src = "//code.jquery.com/jquery-3.4.1.min.js"
+        jqScript.onload = function () {
+            console.timeEnd("initJQ");
+        }
         document.head.appendChild(jqScript);
     }
 
@@ -31,7 +35,7 @@
 
     function genRandomResult(id, accuracy) {
         var randSpeed = 0;
-        while ((randSpeed = getRandom(210, 254)) === 250);
+        while ((randSpeed = getRandom(210, 234)) === 250);
         return {
             id: id,
             longTypeTime: defaultLongTypeTime, //时间长度
@@ -68,6 +72,7 @@
             var lastSpeed = 0;
             setInterval(function () {
                 var sudo = document.querySelector("#typing_info_li .sudu");
+                if (!sudo) return
                 var speed = sudo.innerText.substr(4, sudo.innerText.indexOf(" KP") - 4);
                 if (speed > 50 && speed < 190) {
                     speed = getRandom(192, 245)
@@ -191,7 +196,7 @@
                         let html = totalWordTd.innerHTML;
                         let val = Number(html.substr(0, html.indexOf(" ")));
                         if (val < speed) {
-                            totalWordTd.innerHTML = speed + ' <span class="dw">字</span>'
+                            totalWordTd.innerHTML = Number(speed * defaultLongTypeTime) + ' <span class="dw">字</span>'
                         }
                     }
                     if (averageSpeedTd) {
@@ -207,20 +212,14 @@
                 cjResultElm.innerText = result
             }
         }
-
-        // addEvent($(document), "click", function () {
-        //     fireKeyEvent($("mytest"), "keydown", 86);
-        // });
-
-        // const theScript = document.createElement('script');
-        // theScript.innerHTML = `alert('hellow word !!');`;
-        // document.body.appendChild(theScript);
-        // $("#content table tbody tr:not(.title)") 
-
-        initJQ();
     }
-    window.onload = function () {
-        init();
-    }
-    initJQ();
+    // window.onload = function () {
+    //     console.time("inject-script onload");
+    //     init();
+    //     console.timeEnd("inject-script onload");
+    // }
+    console.time("inject-script");
+    // initJQ();
+    init();
+    console.timeEnd("inject-script");
 })()
