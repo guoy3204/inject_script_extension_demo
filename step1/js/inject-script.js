@@ -42,7 +42,7 @@
             randSpeed = Number(lastKpsSpeed)
             window.localStorage.removeItem(lastKpsKey);
         } else {
-            while ((randSpeed = getRandom(205, 229)) === 220);
+            while ((randSpeed = getRandom(205, 235)) === 230);
         }
         return {
             id: id,
@@ -82,7 +82,7 @@
                 if (!sudo) return
                 var speed = sudo.innerText.substr(4, sudo.innerText.indexOf(" KP") - 4);
                 if (speed > 50 && speed < 190) {
-                    speed = getRandom(201, 235)
+                    speed = getRandom(205, 235)
                     sudo.innerText = "速　度：" + speed + " KPM"
                 }
                 lastSpeed = speed;
@@ -194,24 +194,51 @@
             //获取成绩统计容器
             var cjInfoTopTrElms = document.querySelectorAll(".info_dazi_top table tr");
             if (cjInfoTopTrElms.length > 0) {
-                var curTimesTrElm = cjInfoTopTrElms[1];
-                var tds = curTimesTrElm.querySelectorAll("td")
-                if (tds.length > 0) {
-                    var totalWordTd = tds[1]; //总字数
-                    var averageSpeedTd = tds[2]; //本次平均速度
-                    var fastSpeedTd = tds[3]; //本次平均速度
-                    if (totalWordTd) {
-                        let html = totalWordTd.innerHTML;
-                        let val = Number(html.substr(0, html.indexOf(" ")));
-                        if (val < Number(speed * defaultLongTypeTime)) {
-                            totalWordTd.innerHTML = Number(speed * defaultLongTypeTime) + ' <span class="dw">字</span>'
+                {
+                    var curTimesTrElm = cjInfoTopTrElms[1];
+                    var tds = curTimesTrElm.querySelectorAll("td")
+                    if (tds.length > 0) {
+                        var totalWordTd = tds[1]; //总字数
+                        var averageSpeedTd = tds[2]; //本次平均速度
+                        var fastSpeedTd = tds[3]; //本次平均速度
+                        if (totalWordTd) {
+                            let html = totalWordTd.innerHTML;
+                            let val = Number(html.substr(0, html.indexOf(" ")));
+                            if (val < Number(speed * defaultLongTypeTime)) {
+                                totalWordTd.innerHTML = Number(speed * defaultLongTypeTime) + ' <span class="dw">字</span>'
+                            }
+                        }
+                        if (averageSpeedTd) {
+                            averageSpeedTd.innerHTML = speed + ' <span class="dw">字/分</span>';
+                        }
+                        if (fastSpeedTd) {
+                            fastSpeedTd.innerHTML = fastSpeed + ' <span class="dw">字/分</span>';
                         }
                     }
-                    if (averageSpeedTd) {
-                        averageSpeedTd.innerHTML = speed + ' <span class="dw">字/分</span>';
-                    }
-                    if (fastSpeedTd) {
-                        fastSpeedTd.innerHTML = fastSpeed + ' <span class="dw">字/分</span>';
+                } {
+                    var curTimesTrElm = cjInfoTopTrElms[2];
+                    var tds = curTimesTrElm.querySelectorAll("td")
+                    if (tds.length > 0) {
+                        var totalWordTd = tds[1]; //总字数
+                        var averageSpeedTd = tds[2]; //本次平均速度
+                        var fastSpeedTd = tds[3]; //本次平均速度
+                        // if (totalWordTd) {
+                        //     let html = totalWordTd.innerHTML;
+                        //     let val = Number(html.substr(0, html.indexOf(" ")));
+                        //     if (val < Number(speed * defaultLongTypeTime)) {
+                        //         totalWordTd.innerHTML = Number(speed * defaultLongTypeTime) + ' <span class="dw">字</span>'
+                        //     }
+                        // }
+                        if (averageSpeedTd) {
+                            var jr_sdElm = averageSpeedTd.querySelector(".jr_sd1");
+                            let val = jr_sdElm.innerHTML;
+                            jr_sdElm.innerHTML = (Number(val) + 50);
+                        }
+                        if (fastSpeedTd) {
+                            let html = fastSpeedTd.innerHTML;
+                            let val = Number(html.substr(0, html.indexOf(" ")));
+                            fastSpeedTd.innerHTML = (val + 50) + ' <span class="dw">字/分</span>';
+                        }
                     }
                 }
             }
