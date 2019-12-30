@@ -42,14 +42,14 @@
             randSpeed = Number(lastKpsSpeed)
             window.localStorage.removeItem(lastKpsKey);
         } else {
-            while ((randSpeed = getRandom(210, 234)) === 250);
+            while ((randSpeed = getRandom(205, 229)) === 220);
         }
         return {
             id: id,
             longTypeTime: defaultLongTypeTime, //时间长度
             speed: randSpeed, //速度
             accuracy: accuracy ? accuracy : getRandom(96, 99), //正确率
-            backTimes: getRandom(70, 154), //退格数量
+            backTimes: getRandom(70, 144), //退格数量
             fastSpeed: randSpeed + getRandom(10, 30),
             result: "优秀，成绩不错哟！" //结果
         };
