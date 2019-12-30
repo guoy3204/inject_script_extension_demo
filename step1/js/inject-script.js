@@ -3,6 +3,9 @@
         return
     }
     console.log("inject-script.js loaded", window.location.href);
+    const kpsResultsKey = "___ds_storage__kpsResultsKey"
+    const lastKpsKey = "___ds_storage__lastKpsKey"
+    const defaultLongTypeTime = 5; // 默认当局时长度 分钟
 
     function initJQ() {
         console.time("initJQ");
@@ -31,11 +34,16 @@
         return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
-    var defaultLongTypeTime = 5; // 默认当局时长度 分钟
 
     function genRandomResult(id, accuracy) {
         var randSpeed = 0;
-        while ((randSpeed = getRandom(210, 234)) === 250);
+        var lastKpsSpeed = window.localStorage.getItem(lastKpsKey);
+        if (lastKpsSpeed && Number(lastKpsSpeed) > 0) {
+            randSpeed = Number(lastKpsSpeed)
+            window.localStorage.removeItem(lastKpsKey);
+        } else {
+            while ((randSpeed = getRandom(210, 234)) === 250);
+        }
         return {
             id: id,
             longTypeTime: defaultLongTypeTime, //时间长度
@@ -47,8 +55,7 @@
         };
     }
 
-    function init() { //init 
-        var kpsResultsKey = "___ds_storage__kpsResultsKey"
+    function init() { //init  
         var kpsResultsData = window.localStorage.getItem(kpsResultsKey);
         var kpsResults = {} // 从缓存中加载数据
         if (kpsResultsData) {
@@ -75,7 +82,7 @@
                 if (!sudo) return
                 var speed = sudo.innerText.substr(4, sudo.innerText.indexOf(" KP") - 4);
                 if (speed > 50 && speed < 190) {
-                    speed = getRandom(192, 245)
+                    speed = getRandom(201, 235)
                     sudo.innerText = "速　度：" + speed + " KPM"
                 }
                 lastSpeed = speed;
@@ -86,6 +93,7 @@
                         endKpsElm.innerText = lastSpeed
                     }
                 }
+                window.localStorage.setItem(lastKpsKey, lastSpeed);
             }, 300)
         } else if (window.location.pathname.indexOf("list_") > 0) {
             var trItems = document.querySelectorAll("#content table tbody tr:not(.title)");
@@ -195,7 +203,7 @@
                     if (totalWordTd) {
                         let html = totalWordTd.innerHTML;
                         let val = Number(html.substr(0, html.indexOf(" ")));
-                        if (val < speed) {
+                        if (val < Number(speed * defaultLongTypeTime)) {
                             totalWordTd.innerHTML = Number(speed * defaultLongTypeTime) + ' <span class="dw">字</span>'
                         }
                     }
